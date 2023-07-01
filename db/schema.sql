@@ -3,10 +3,18 @@ CREATE DATABASE employeeTrackerDB;
 
 CREATE TABLE employee (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(30) NOT NULL,
+  last_name VARCHAR(30) NOT NULL,
+  role_id INT NOT NULL,
+  manager_id INT,
 )
 
-CREATE TABLE employeeRole (
+CREATE TABLE role (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(30) NOT NULL,
+  salary DECIMAL NOT NULL,
+  department_id INT
+
 )
 
 CREATE TABLE department (
