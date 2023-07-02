@@ -1,6 +1,6 @@
 const inquire = require("inquirer");
 const mysql = require("mysql");
-const { start } = require("repl");
+// const { start } = require("repl");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   console.log("Welcome to the Employee Tracker!");
-  start();
+  // start();
 });
 
 const ShowDepts = () => {
@@ -27,14 +27,14 @@ const showEmployees = () => {
   connection.query("SELECT * FROM employee", function (err, res) {
     if (err) throw err;
     console.table(res);
-    start();
+    // start();
   });
 };
 const showRoles = () => {
   connection.query("SELECT * FROM role", function (err, res) {
     if (err) throw err;
     console.table(res);
-    start();
+    // start();
   });
 };
 const addDept = () => {
@@ -51,11 +51,11 @@ const addDept = () => {
       .then(function (answer) {
         connection.query(
           "INSERT INTO department (deptName) VALUES (?)",
-          [answer.deptName], // Use an array with the value to be inserted
+          [answer.deptName], 
           function (err, res) {
             if (err) throw err;
             console.table(res);
-            start();
+            // start();
           }
         );
       });
@@ -90,7 +90,7 @@ const addRole = () => {
           function (err, res) {
             if (err) throw err;
             console.table(res);
-            start();
+            // start();
           }
         );
       });
@@ -124,8 +124,50 @@ const makeEmployee = () => {
       [answer.firstName, answer.lastName, answer.roleID, answer.managerID],
       function (err, res) {
         if (err) throw err;
-        // Additional code or error handling can be added here
       }
     );
+  });
+};
+const updateEmployeeRole = () => {
+  inquirer.prompt([
+    {
+      name: "roleID",
+      type: "input",
+      message: "What is the employees id?",
+    },
+    {
+      name: "newRoleID",
+      type: "input",
+      message: "What is the employees new role ID?",
+    }
+  ])
+  .then(function (answer) {
+    connection.query(
+      "UPDATE employee SET role_id =? WHERE id =?",
+      [answer.newRoleID, answer.roleID],
+      function (err, res) {
+        if (err) throw err;
+      }
+    )
+  });
+};
+const generateMenu = () => {
+  inquirer.prompt([
+    {
+      message: 'Please select one of the following options:',
+      name: "menuChoice",
+      type: "list",
+      choices: [
+        'All departments',
+        'All roles',
+        'All employees',
+        'Add a department',
+        'Add a role',
+        'Add an employee',
+        'Update an employee role',
+        'Exit'
+      ]
+    }
+  ]).then(function (answer) {
   });
 };
