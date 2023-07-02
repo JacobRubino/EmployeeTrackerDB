@@ -1,3 +1,4 @@
+const { connect } = require("http2");
 const inquire = require("inquirer");
 const mysql = require("mysql");
 // const { start } = require("repl");
@@ -169,5 +170,30 @@ const generateMenu = () => {
       ]
     }
   ]).then(function (answer) {
+    switch (answer.menuChoice) {
+      case 'All departments':
+        ShowDepts()
+        break;
+      case 'All roles':
+        showRoles()
+        break;
+      case 'All employees':
+        showEmployees();
+        break;
+      case 'Add a department':
+        addDept();
+        break;
+      case 'Add a role':
+        addRole();
+        break;
+      case 'Add an employee':
+        createEmployee();
+        break;
+      case 'Update an employee role':
+        updateEmployeeRole();
+        break:
+      case 'Exit':
+        connection.end();
+        break;
   });
 };
