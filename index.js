@@ -191,9 +191,12 @@ const generateMenu = () => {
         break;
       case 'Update an employee role':
         updateEmployeeRole();
-        break:
+        break;
       case 'Exit':
         connection.end();
         break;
+      default:
+        connection.end();
+    }
   });
 };
