@@ -1,9 +1,7 @@
-const { connect } = require("http2");
-const inquire = require("inquirer");
-const mysql = require("mysql");
-// const { start } = require("repl");
+const { prompt } = require("inquirer");
+const { createConnection } = require("mysql");
 
-const connection = mysql.createConnection({
+const connection = createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
@@ -21,7 +19,7 @@ const ShowDepts = () => {
   connection.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
     console.table(res);
-    start();
+    generateMenu();
   });
 };
 const showEmployees = () => {
@@ -41,8 +39,7 @@ const showRoles = () => {
 const addDept = () => {
   connection.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
-    inquirer
-      .prompt([
+    prompt([
         {
           type: "input",
           name: "deptName",
@@ -51,7 +48,7 @@ const addDept = () => {
       ])
       .then(function (answer) {
         connection.query(
-          "INSERT INTO department (deptName) VALUES (?)",
+          "INSERT INTO department (name) VALUES (?)",
           [answer.deptName], 
           function (err, res) {
             if (err) throw err;
@@ -65,8 +62,7 @@ const addDept = () => {
 const addRole = () => {
   connection.query("SELECT * FROM department", function (err, res) {
     if (err) throw err;
-    inquirer
-      .prompt([
+    prompt([
         {
           type: "input",
           name: "roleName",
@@ -87,18 +83,18 @@ const addRole = () => {
       .then(function (answer) {
         connection.query(
           "INSERT INTO role (title, salary, department_id) VALUES (?,?,?)",
-          [answer.roleName, answer.roleSalary, answer.roleDept], 
+          [answer.roleName, answer.roleSalary, answer.roleDept],
           function (err, res) {
             if (err) throw err;
             console.table(res);
-            generateMenu()
+            generateMenu();
           }
         );
       });
   });
 };
 const makeEmployee = () => {
-  inquirer.prompt([
+  prompt([
     {
       name: "firstName",
       type: "input",
@@ -126,14 +122,12 @@ const makeEmployee = () => {
       function (err, res) {
         if (err) throw err;
         generateMenu();
-      }
-      
+      }      
     );
-
   });
 };
 const updateEmployeeRole = () => {
-  inquirer.prompt([
+  prompt([
     {
       name: "roleID",
       type: "input",
@@ -147,17 +141,17 @@ const updateEmployeeRole = () => {
   ])
   .then(function (answer) {
     connection.query(
-      "UPDATE employee SET role_id =? WHERE id =?",
+      "UPDATE employee SET role_id = ? WHERE id = ?",
       [answer.newRoleID, answer.roleID],
       function (err, res) {
         if (err) throw err;
-        generateMenu()
+        generateMenu();
       }
     )
   });
 };
 const generateMenu = () => {
-  inquirer.prompt([
+  prompt([
     {
       message: 'Please select one of the following options:',
       name: "menuChoice",
@@ -191,7 +185,7 @@ const generateMenu = () => {
         addRole();
         break;
       case 'Add an employee':
-        createEmployee();
+        makeEmployee();
         break;
       case 'Update an employee role':
         updateEmployeeRole();
