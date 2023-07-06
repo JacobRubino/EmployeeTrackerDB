@@ -7,14 +7,14 @@ const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
   user: "root",
-  password: "",
+  password: "Chipotle123!",
   database: "employeeTrackerDB",
 });
 
 connection.connect(function (err) {
   if (err) throw err;
   console.log("Welcome to the Employee Tracker!");
-  // start();
+  generateMenu()
 });
 
 const ShowDepts = () => {
@@ -28,14 +28,14 @@ const showEmployees = () => {
   connection.query("SELECT * FROM employee", function (err, res) {
     if (err) throw err;
     console.table(res);
-    // start();
+    generateMenu()
   });
 };
 const showRoles = () => {
   connection.query("SELECT * FROM role", function (err, res) {
     if (err) throw err;
     console.table(res);
-    // start();
+    generateMenu()
   });
 };
 const addDept = () => {
@@ -56,7 +56,7 @@ const addDept = () => {
           function (err, res) {
             if (err) throw err;
             console.table(res);
-            // start();
+            generateMenu()
           }
         );
       });
@@ -91,7 +91,7 @@ const addRole = () => {
           function (err, res) {
             if (err) throw err;
             console.table(res);
-            // start();
+            generateMenu()
           }
         );
       });
@@ -125,8 +125,11 @@ const makeEmployee = () => {
       [answer.firstName, answer.lastName, answer.roleID, answer.managerID],
       function (err, res) {
         if (err) throw err;
+        generateMenu();
       }
+      
     );
+
   });
 };
 const updateEmployeeRole = () => {
@@ -148,6 +151,7 @@ const updateEmployeeRole = () => {
       [answer.newRoleID, answer.roleID],
       function (err, res) {
         if (err) throw err;
+        generateMenu()
       }
     )
   });
